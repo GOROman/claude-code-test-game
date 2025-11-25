@@ -1,73 +1,139 @@
-# React + TypeScript + Vite
+# GRASS HARLEY
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+1987年アーケードスタイルを再現した縦スクロールシューティングゲーム
 
-Currently, two official plugins are available:
+## スクリーンショット
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+    ╔═══════════════════════════════════╗
+    ║  SCORE: 00012500   HI: 00050000   ║
+    ║  LIFE: 3           BOMB: 2        ║
+    ╠═══════════════════════════════════╣
+    ║         ★    ☆      ★            ║
+    ║    ◆         ▼▼▼        ◆        ║
+    ║       ●  ●  ●●●●●  ●  ●          ║
+    ║              ◇                    ║
+    ║         ●         ●               ║
+    ║    ▲                    ▲         ║
+    ║              ▲                    ║
+    ║         △                         ║
+    ║              🚀                   ║
+    ║    STAGE 1           NORMAL       ║
+    ╚═══════════════════════════════════╝
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 特徴
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- 60FPS固定タイムステップによる滑らかなゲームプレイ
+- 5ステージ構成（各ステージにボス戦あり）
+- 10種類以上の敵キャラクター
+- 多彩な弾幕パターン
+- パワーアップシステム
+- NORMAL / HARD 難易度選択
+- ハイスコア保存機能
+- デスクトップ・モバイル両対応
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 操作方法
+
+### キーボード
+
+| キー | アクション |
+|------|----------|
+| 矢印キー / WASD | 移動 |
+| Z / Space | ショット |
+| X | ボム |
+| Shift | 精密移動（低速移動） |
+| Enter / ESC | ポーズ |
+
+### ゲームパッド
+
+- 左スティック / 十字キー: 移動
+- A / X ボタン: ショット
+- B / Y ボタン: ボム
+- LB / RB: 精密移動
+- Start: ポーズ
+
+### タッチスクリーン
+
+モバイルデバイスでは仮想コントローラーが表示されます。
+
+## インストール & 実行
+
+```bash
+# 依存関係のインストール
+npm install
+
+# 開発サーバー起動
+npm run dev
+
+# プロダクションビルド
+npm run build
+
+# ビルドのプレビュー
+npm run preview
 ```
+
+## ゲームシステム
+
+### プレイヤー
+
+- **移動速度**: 通常 3.0px/frame、精密移動 1.5px/frame
+- **初期装備**: 残機 3、ボム 3
+- **パワーレベル**: 4段階（0〜3）
+
+### 敵キャラクター
+
+| 名前 | 特徴 |
+|------|------|
+| ZakoA | 直進して直線弾を撃つ |
+| ZakoB | プレイヤーを追尾、狙い弾 |
+| Spinner | 回転しながら螺旋弾 |
+| Zoomer | 高速移動、狙い弾 |
+| GroundTurret | 固定砲台、3方向弾 |
+| ItemCarrier | 撃破でアイテム確定ドロップ |
+| Hatch | 円形弾幕 |
+| RockTurret | 拡散弾 |
+| LaserTrap | レーザー攻撃 |
+| Debris | 破片、低HP |
+
+### ボス
+
+- 各ステージ終盤に出現
+- 3つの攻撃フェーズ（HP残量で変化）
+- HARDモードではHP 1.5倍
+
+### アイテム
+
+| アイテム | 効果 |
+|----------|------|
+| P (赤) | パワーアップ |
+| B (緑) | ボム追加 |
+| 1UP (紫) | 残機追加 |
+| $ (黄) | スコア +500 |
+
+## 技術スタック
+
+- **TypeScript** - ゲームロジック
+- **React** - UIフレームワーク
+- **HTML5 Canvas** - グラフィックスレンダリング
+- **Vite** - ビルドツール
+
+## ファイル構成
+
+```
+src/
+├── game/
+│   ├── types.ts      # 型定義
+│   ├── Game.ts       # メインゲームエンジン
+│   ├── Player.ts     # プレイヤー
+│   ├── Enemy.ts      # 敵キャラクター
+│   ├── Boss.ts       # ボス
+│   └── Input.ts      # 入力ハンドリング
+├── App.tsx           # Reactコンポーネント
+├── App.css           # スタイル
+└── main.tsx          # エントリーポイント
+```
+
+## ライセンス
+
+MIT
