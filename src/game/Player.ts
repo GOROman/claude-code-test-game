@@ -2,6 +2,7 @@
 
 import type { PlayerState, Bullet, InputState } from './types';
 import { GAME_WIDTH, GAME_HEIGHT, PLAYER_SPEED, PLAYER_FOCUS_SPEED } from './types';
+import { drawSprite } from './Sprites';
 
 export class Player {
   state: PlayerState;
@@ -187,24 +188,12 @@ export class Player {
 
     ctx.save();
 
-    // 自機の描画（三角形の宇宙船）
-    ctx.fillStyle = '#00ff88';
-    ctx.beginPath();
-    ctx.moveTo(x, y - 16);
-    ctx.lineTo(x - 12, y + 8);
-    ctx.lineTo(x, y + 2);
-    ctx.lineTo(x + 12, y + 8);
-    ctx.closePath();
-    ctx.fill();
+    // エンジンの炎（SVG）
+    const flameOffset = Math.random() * 4;
+    drawSprite(ctx, 'playerFlame', x, y + 14 + flameOffset, 12, 12 + flameOffset);
 
-    // エンジンの炎
-    ctx.fillStyle = '#ffaa00';
-    ctx.beginPath();
-    ctx.moveTo(x - 6, y + 8);
-    ctx.lineTo(x, y + 16 + Math.random() * 4);
-    ctx.lineTo(x + 6, y + 8);
-    ctx.closePath();
-    ctx.fill();
+    // 自機の描画（SVG）
+    drawSprite(ctx, 'player', x, y, 32, 32);
 
     // 精密移動中は当たり判定を表示
     if (this.state.isFocused) {

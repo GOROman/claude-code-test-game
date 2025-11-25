@@ -2,6 +2,8 @@
 
 import type { Enemy, EnemyType, Bullet } from './types';
 import { GAME_WIDTH, GAME_HEIGHT } from './types';
+import { drawSprite } from './Sprites';
+import type { SpriteType } from './Sprites';
 
 export class EnemyManager {
   enemies: Enemy[] = [];
@@ -403,75 +405,27 @@ export class EnemyManager {
 
     ctx.save();
 
-    // 敵タイプ別の描画
-    switch (type) {
-      case 'ZakoA':
-        ctx.fillStyle = '#ff4444';
-        this.drawTriangle(ctx, x, y, width, false);
-        break;
+    // 敵タイプ別のスプライト描画
+    const spriteMap: Record<EnemyType, SpriteType> = {
+      ZakoA: 'zakoA',
+      ZakoB: 'zakoB',
+      Spinner: 'spinner',
+      Zoomer: 'zoomer',
+      GroundTurret: 'groundTurret',
+      RockTurret: 'groundTurret',
+      ItemCarrier: 'itemCarrier',
+      Hatch: 'hatch',
+      LaserTrap: 'laserTrap',
+      Debris: 'debris',
+    };
 
-      case 'ZakoB':
-        ctx.fillStyle = '#ff8800';
-        this.drawDiamond(ctx, x, y, width, height);
-        break;
+    const spriteType = spriteMap[type];
 
-      case 'Spinner':
-        ctx.fillStyle = '#ff00ff';
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate(enemy.patternTimer * 0.1);
-        this.drawStar(ctx, 0, 0, width / 2);
-        ctx.restore();
-        break;
-
-      case 'Zoomer':
-        ctx.fillStyle = '#ffff00';
-        ctx.beginPath();
-        ctx.arc(x, y, width / 2, 0, Math.PI * 2);
-        ctx.fill();
-        break;
-
-      case 'GroundTurret':
-      case 'RockTurret':
-        ctx.fillStyle = '#888888';
-        ctx.fillRect(x - width / 2, y - height / 2, width, height);
-        ctx.fillStyle = '#444444';
-        ctx.beginPath();
-        ctx.arc(x, y, width / 3, 0, Math.PI * 2);
-        ctx.fill();
-        break;
-
-      case 'ItemCarrier':
-        ctx.fillStyle = '#00ff88';
-        ctx.fillRect(x - width / 2, y - height / 2, width, height);
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '12px monospace';
-        ctx.textAlign = 'center';
-        ctx.fillText('?', x, y + 4);
-        break;
-
-      case 'Hatch':
-        ctx.fillStyle = '#666666';
-        ctx.fillRect(x - width / 2, y - height / 2, width, height);
-        ctx.fillStyle = '#000000';
-        ctx.fillRect(x - width / 4, y - height / 4, width / 2, height / 2);
-        break;
-
-      case 'LaserTrap':
-        ctx.fillStyle = '#00aaff';
-        ctx.fillRect(x - width / 2, y - 5, width, 10);
-        break;
-
-      case 'Debris':
-        ctx.fillStyle = '#aaaaaa';
-        ctx.beginPath();
-        ctx.moveTo(x, y - height / 2);
-        ctx.lineTo(x + width / 2, y);
-        ctx.lineTo(x, y + height / 2);
-        ctx.lineTo(x - width / 2, y);
-        ctx.closePath();
-        ctx.fill();
-        break;
+    // Spinnerは回転させる
+    if (type === 'Spinner') {
+      drawSprite(ctx, spriteType, x, y, width, height, enemy.patternTimer * 0.1);
+    } else {
+      drawSprite(ctx, spriteType, x, y, width, height);
     }
 
     // HPバー（大型敵のみ）
@@ -485,46 +439,5 @@ export class EnemyManager {
     }
 
     ctx.restore();
-  }
-
-  private drawTriangle(ctx: CanvasRenderingContext2D, x: number, y: number, size: number, up: boolean): void {
-    ctx.beginPath();
-    if (up) {
-      ctx.moveTo(x, y - size / 2);
-      ctx.lineTo(x - size / 2, y + size / 2);
-      ctx.lineTo(x + size / 2, y + size / 2);
-    } else {
-      ctx.moveTo(x, y + size / 2);
-      ctx.lineTo(x - size / 2, y - size / 2);
-      ctx.lineTo(x + size / 2, y - size / 2);
-    }
-    ctx.closePath();
-    ctx.fill();
-  }
-
-  private drawDiamond(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number): void {
-    ctx.beginPath();
-    ctx.moveTo(x, y - h / 2);
-    ctx.lineTo(x + w / 2, y);
-    ctx.lineTo(x, y + h / 2);
-    ctx.lineTo(x - w / 2, y);
-    ctx.closePath();
-    ctx.fill();
-  }
-
-  private drawStar(ctx: CanvasRenderingContext2D, x: number, y: number, radius: number): void {
-    ctx.beginPath();
-    for (let i = 0; i < 5; i++) {
-      const angle = (i * 4 * Math.PI) / 5 - Math.PI / 2;
-      const px = x + Math.cos(angle) * radius;
-      const py = y + Math.sin(angle) * radius;
-      if (i === 0) {
-        ctx.moveTo(px, py);
-      } else {
-        ctx.lineTo(px, py);
-      }
-    }
-    ctx.closePath();
-    ctx.fill();
   }
 }

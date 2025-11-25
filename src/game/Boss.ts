@@ -2,6 +2,7 @@
 
 import type { Boss, Bullet, Difficulty } from './types';
 import { GAME_WIDTH, GAME_HEIGHT } from './types';
+import { drawColoredSprite } from './Sprites';
 
 export class BossManager {
   boss: Boss | null = null;
@@ -281,49 +282,45 @@ export class BossManager {
 
     ctx.save();
 
-    // ボス本体
+    // ステージ別のボスカラー
     const colors = ['#880000', '#884400', '#888800', '#448800', '#008888'];
     const baseColor = colors[(stageNumber - 1) % colors.length];
 
-    // メインボディ
-    ctx.fillStyle = baseColor;
-    ctx.beginPath();
-    ctx.moveTo(x, y - height / 2);
-    ctx.lineTo(x + width / 2, y);
-    ctx.lineTo(x + width / 3, y + height / 2);
-    ctx.lineTo(x - width / 3, y + height / 2);
-    ctx.lineTo(x - width / 2, y);
-    ctx.closePath();
-    ctx.fill();
-
-    // コア（フェーズで色が変わる）
-    const coreColors = ['#ff4444', '#ffaa00', '#ff00ff'];
-    ctx.fillStyle = coreColors[phase - 1];
-    ctx.beginPath();
-    ctx.arc(x, y, 15 + Math.sin(patternTimer * 0.1) * 3, 0, Math.PI * 2);
-    ctx.fill();
-
-    // ウイング
-    ctx.fillStyle = baseColor;
+    // 左ウイング（SVG）
     ctx.globalAlpha = 0.8;
+    drawColoredSprite(
+      ctx,
+      'bossWing',
+      baseColor,
+      x - width / 2 - 5,
+      y,
+      30,
+      height * 0.8
+    );
 
-    // 左ウイング
-    ctx.beginPath();
-    ctx.moveTo(x - width / 3, y - height / 4);
-    ctx.lineTo(x - width / 2 - 20, y - height / 2);
-    ctx.lineTo(x - width / 2, y + height / 4);
-    ctx.closePath();
-    ctx.fill();
-
-    // 右ウイング
-    ctx.beginPath();
-    ctx.moveTo(x + width / 3, y - height / 4);
-    ctx.lineTo(x + width / 2 + 20, y - height / 2);
-    ctx.lineTo(x + width / 2, y + height / 4);
-    ctx.closePath();
-    ctx.fill();
-
+    // 右ウイング（反転して描画）
+    ctx.save();
+    ctx.translate(x + width / 2 + 5, y);
+    ctx.scale(-1, 1);
+    drawColoredSprite(
+      ctx,
+      'bossWing',
+      baseColor,
+      0,
+      0,
+      30,
+      height * 0.8
+    );
+    ctx.restore();
     ctx.globalAlpha = 1;
+
+    // メインボディ（SVG）
+    drawColoredSprite(ctx, 'bossBody', baseColor, x, y, width, height);
+
+    // コア（SVG）- フェーズで色が変わる
+    const coreColors = ['#ff4444', '#ffaa00', '#ff00ff'];
+    const coreSize = 30 + Math.sin(patternTimer * 0.1) * 6;
+    drawColoredSprite(ctx, 'bossCore', coreColors[phase - 1], x, y, coreSize, coreSize);
 
     // HPバー
     const barWidth = width + 40;
