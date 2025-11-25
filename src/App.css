@@ -1,0 +1,263 @@
+/* タイトル画面 */
+.title-screen {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(180deg, #000033 0%, #000011 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.title-container {
+  text-align: center;
+  color: #ffffff;
+}
+
+.game-title {
+  font-family: 'Courier New', monospace;
+  font-size: 48px;
+  font-weight: bold;
+  color: #00ff88;
+  text-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88;
+  margin-bottom: 10px;
+  animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+  from {
+    text-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88;
+  }
+  to {
+    text-shadow: 0 0 30px #00ffaa, 0 0 60px #00ffaa, 0 0 80px #00ffaa;
+  }
+}
+
+.subtitle {
+  font-family: monospace;
+  font-size: 14px;
+  color: #888888;
+  margin-bottom: 40px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.menu-button {
+  font-family: monospace;
+  font-size: 20px;
+  padding: 15px 40px;
+  border: 2px solid;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.menu-button.normal {
+  color: #00ff00;
+  border-color: #00ff00;
+}
+
+.menu-button.normal:hover {
+  background: #00ff00;
+  color: #000000;
+  box-shadow: 0 0 20px #00ff00;
+}
+
+.menu-button.hard {
+  color: #ff4444;
+  border-color: #ff4444;
+}
+
+.menu-button.hard:hover {
+  background: #ff4444;
+  color: #000000;
+  box-shadow: 0 0 20px #ff4444;
+}
+
+.controls-info {
+  font-family: monospace;
+  font-size: 12px;
+  color: #aaaaaa;
+}
+
+.controls-info h3 {
+  color: #ffff00;
+  margin-bottom: 15px;
+}
+
+.control-list {
+  text-align: left;
+  display: inline-block;
+}
+
+.control-list p {
+  margin: 5px 0;
+}
+
+.key {
+  color: #00aaff;
+  background: #222233;
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
+.mobile-hint {
+  color: #ff8800;
+  margin-top: 20px;
+}
+
+/* ゲーム画面 */
+.game-screen {
+  width: 100vw;
+  height: 100vh;
+  background: #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.game-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-canvas {
+  border: 2px solid #333333;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.back-button {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  font-family: monospace;
+  font-size: 14px;
+  padding: 5px 15px;
+  background: transparent;
+  border: 1px solid #666666;
+  color: #888888;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-button:hover {
+  border-color: #00ff88;
+  color: #00ff88;
+}
+
+/* タッチコントロール */
+.touch-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  pointer-events: none;
+}
+
+.dpad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  pointer-events: auto;
+}
+
+.dpad-row {
+  display: flex;
+  gap: 5px;
+}
+
+.dpad-button {
+  width: 50px;
+  height: 50px;
+  font-size: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  touch-action: none;
+  user-select: none;
+}
+
+.dpad-button:active {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.dpad-button.focus {
+  font-size: 14px;
+  background: rgba(255, 0, 102, 0.3);
+  border-color: rgba(255, 0, 102, 0.6);
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.action-button {
+  width: 80px;
+  height: 60px;
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 15px;
+  border: 2px solid;
+  touch-action: none;
+  user-select: none;
+}
+
+.action-button.shoot {
+  background: rgba(0, 255, 255, 0.3);
+  border-color: rgba(0, 255, 255, 0.6);
+  color: #00ffff;
+}
+
+.action-button.shoot:active {
+  background: rgba(0, 255, 255, 0.6);
+}
+
+.action-button.bomb {
+  background: rgba(255, 136, 0, 0.3);
+  border-color: rgba(255, 136, 0, 0.6);
+  color: #ff8800;
+}
+
+.action-button.bomb:active {
+  background: rgba(255, 136, 0, 0.6);
+}
+
+/* レスポンシブ */
+@media (max-width: 480px) {
+  .game-title {
+    font-size: 32px;
+  }
+
+  .menu-button {
+    font-size: 16px;
+    padding: 12px 30px;
+  }
+
+  .game-canvas {
+    max-width: 100vw;
+    height: auto;
+  }
+}
