@@ -6,6 +6,8 @@ import { InputManager } from './Input';
 import { Player } from './Player';
 import { EnemyManager } from './Enemy';
 import { BossManager } from './Boss';
+import { drawSprite, preloadAllSprites } from './Sprites';
+import type { SpriteType } from './Sprites';
 
 export class Game {
   private ctx: CanvasRenderingContext2D;
@@ -43,6 +45,9 @@ export class Game {
 
     this.initBackground();
     this.loadHighScore();
+
+    // SVGスプライトを事前ロード
+    preloadAllSprites();
   }
 
   private createInitialState(): GameState {
@@ -538,21 +543,18 @@ export class Game {
     for (const bullet of this.bullets) {
       if (!bullet.active) continue;
 
-      ctx.fillStyle = bullet.color;
-
       if (bullet.isPlayerBullet) {
-        // プレイヤー弾は細長い
-        ctx.fillRect(
-          bullet.x - bullet.width / 2,
-          bullet.y - bullet.height / 2,
-          bullet.width,
-          bullet.height
-        );
+        // プレイヤー弾（SVG）
+        drawSprite(ctx, 'playerBullet', bullet.x, bullet.y, bullet.width, bullet.height);
       } else {
-        // 敵弾は丸い
-        ctx.beginPath();
-        ctx.arc(bullet.x, bullet.y, bullet.width / 2, 0, Math.PI * 2);
-        ctx.fill();
+        // 敵弾（SVG） - サイズに応じてスプライトを選択
+        let spriteType: SpriteType = 'enemyBulletSmall';
+        if (bullet.width >= 15) {
+          spriteType = 'enemyBulletLarge';
+        } else if (bullet.width >= 10) {
+          spriteType = 'enemyBulletMedium';
+        }
+        drawSprite(ctx, spriteType, bullet.x, bullet.y, bullet.width, bullet.height);
       }
     }
   }
@@ -560,33 +562,18 @@ export class Game {
   private drawItems(): void {
     const ctx = this.ctx;
 
+    const spriteMap: Record<Item['type'], SpriteType> = {
+      power: 'itemPower',
+      bomb: 'itemBomb',
+      life: 'itemLife',
+      score: 'itemScore',
+    };
+
     for (const item of this.items) {
       if (!item.active) continue;
 
-      const colors = {
-        power: '#ff0000',
-        bomb: '#00ff00',
-        life: '#ff00ff',
-        score: '#ffff00',
-      };
-
-      const labels = {
-        power: 'P',
-        bomb: 'B',
-        life: '1UP',
-        score: '$',
-      };
-
-      ctx.fillStyle = colors[item.type];
-      ctx.beginPath();
-      ctx.arc(item.x, item.y, item.width / 2, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 10px monospace';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(labels[item.type], item.x, item.y);
+      const spriteType = spriteMap[item.type];
+      drawSprite(ctx, spriteType, item.x, item.y, item.width, item.height);
     }
   }
 
