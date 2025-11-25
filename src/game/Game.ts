@@ -64,7 +64,7 @@ export class Game {
         x: Math.random() * GAME_WIDTH,
         y: Math.random() * GAME_HEIGHT,
         speed: 0.5 + Math.random() * 2,
-        size: 1 + Math.random() * 2,
+        size: 1,
       });
     }
   }
@@ -527,9 +527,7 @@ export class Game {
 
     for (const star of this.backgroundStars) {
       ctx.globalAlpha = 0.5 + star.speed / 4;
-      ctx.beginPath();
-      ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.fillRect(star.x, star.y, 1, 1);
     }
     ctx.globalAlpha = 1;
   }
